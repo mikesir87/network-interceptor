@@ -1,0 +1,30 @@
+services:
+  proxy:
+    image: traefik
+    command: --providers.docker
+    ports:
+      - 3000:80
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+
+  backend:
+    build: 
+      context: ./
+      target: backend-dev
+    volumes:
+      - ~/.yarn:/root/.yarn
+      - ./backend:/usr/local/app
+      - /var/run/docker.sock:/var/run/docker.sock
+    labels:
+      traefik.http.routers.backend.rule: Host(`localhost`) && PathPrefix(`/api`)
+      traefik.http.services.backend.loadbalancer.server.port: 3000
+
+  client:
+    build:
+      context: ./
+      target: client-dev
+    volumes:
+      - ./client:/usr/local/app
+    labels:
+      traefik.http.routers.client.rule: Host(`localhost`)
+      traefik.http.services.client.loadbalancer.server.port: 3000
