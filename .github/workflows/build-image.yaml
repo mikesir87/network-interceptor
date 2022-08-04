@@ -1,4 +1,4 @@
-name: ci
+name: Build Container Image
 
 on:
   push:
@@ -27,3 +27,4 @@ jobs:
         with:
           push: true
           tags: mikesir87/network-mentor:latest
+          platforms: linux/amd64,linux/arm64
