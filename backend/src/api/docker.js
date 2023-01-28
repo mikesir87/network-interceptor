@@ -71,6 +71,10 @@ function getPortsForContainer(req, res) {
 
     res.send({ ports: portsWithProcesses });
   }).catch(err => {
+    if (err.message.indexOf("No such image"))
+      return docker.pull("nicolaka/netshoot")
+        .then(() => getPortsForContainer(req, res));
+
     console.error(err);
     res.status(500).send(err)
   });

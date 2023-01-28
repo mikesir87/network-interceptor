@@ -1,12 +1,14 @@
+import { FC, useState } from "react";
 import Box from "@mui/material/Box";
 import Collapse from "@mui/material/Collapse";
 import IconButton from "@mui/material/IconButton";
 import TableCell from "@mui/material/TableCell";
 import TableRow from "@mui/material/TableRow";
 import Typography from "@mui/material/Typography";
-import { FC, useState } from "react";
 import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
 import KeyboardArrowUpIcon from '@mui/icons-material/KeyboardArrowUp';
+import ArrowBack from '@mui/icons-material/ArrowBack';
+import ArrowForward from '@mui/icons-material/ArrowForward';
 import { Packet } from "../CaptureContext"
 
 type PacketRowProps = {
@@ -36,7 +38,11 @@ export const PacketRow : FC<PacketRowProps> = ({ port, packet }) => {
             {open ? <KeyboardArrowUpIcon /> : <KeyboardArrowDownIcon />}
           </IconButton>
         </TableCell>
-        <TableCell>{ packet.tcpInfo && packet.tcpInfo.sourcePort == parseInt(port) ? "<" : ">" }</TableCell>
+        <TableCell>
+          { packet.tcpInfo && packet.tcpInfo.sourcePort == parseInt(port) ?
+            <ArrowBack /> : <ArrowForward /> 
+          }
+        </TableCell>
         <TableCell>{ packet.sourceIp }{ packet.tcpInfo && `:${packet.tcpInfo.sourcePort}` }</TableCell>
         <TableCell>{ packet.destinationIp }{ packet.tcpInfo && `:${packet.tcpInfo.destinationPort}` }</TableCell>
         <TableCell>

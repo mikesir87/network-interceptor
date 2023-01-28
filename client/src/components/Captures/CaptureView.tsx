@@ -25,12 +25,12 @@ export const CaptureView = () => {
   const handleChange = useCallback((e: SyntheticEvent, newValue: string) => {
     if (newValue === "start-capture") return;
     if (newValue === "home") {
-      navigate(`/captures`);
+      navigate(`/`);
       return;
     }
 
     const [containerId, port] = newValue.split(":");
-    navigate(`/captures/containers/${containerId}/ports/${port}`);
+    navigate(`/containers/${containerId}/ports/${port}`);
   }, [navigate]);
 
   useEffect(() => {
@@ -47,7 +47,7 @@ export const CaptureView = () => {
   const onCaptureModalClose = useCallback((containerId?: string, port?: string) => {
     setShowCaptureModal(false);
     if (containerId && port)
-      navigate(`/captures/containers/${containerId}/ports/${port}`);
+      navigate(`/containers/${containerId}/ports/${port}`);
   }, [setShowCaptureModal, navigate]);
 
   return (

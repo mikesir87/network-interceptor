@@ -1,62 +1,29 @@
-# Test Runner
+# Container Network Tool
 
-This project provides a GUI to support the running of tests located on the filesystem. The idea is to use a generic runner, but mount in tests based on the use case (per tutorial, writeup, etc.).
+This project provides a minimal web-based network visualizer that lets you intercept (using `tcpdump`) the traffic of any container running on your machine. And best of all... no tools are required to be installed in the container!
 
-## Starting the Runner
+## How it works
 
-If you want to run the app, you can use the following command after cloning the repo. This is going to mount in the sample tests, but feel free to swap out with your own tests!
+To intercept traffic, we're leveraging `tcpdump`. Recognizing most containers don't have `tcpdump` installed, we are leveraging the `nicolaka/netshoot` image to start a new container in the same process and network namespace as the target container. This lets us listen to the same network interfaces the container is using without requiring tools to be installed in the container itself.
 
-```
-docker run -dp 3000:3000 -v $PWD/sample-tests:/tests mikesir87/test-runner
-```
+Once the packets are intercepted, they are transmitted via WebSocket to the frontend application where they are decoded and rendered in the UI. The "backend" of the app simply serves as the relay to start the interceptor and forward the intercepted packets.
 
-Then, open [http://localhost:3000](http://localhost:3000).
+## Running the application
 
-
-## Writing your own Tests
-
-When the app starts, it scans for all test suites in the `/tests` directory. The directory structure is as follows:
-
-- Each suite of tests is in its own folder, allowing you to run one suite at a time
-- Each directory _must_ have a `suite.yaml` that defines metadata about the suite
-- All tests are in `*.spec.js` files and will be included as part of the suite execution
-
-In a pseudo-graphical view, it'll look like this: 
+Simply run:
 
 ```
-- /tests/
-    - suite-one/
-        - suite.yaml
-        - test.spec.js
-    - suite-two/
-        - suite.yaml
-        - test.spec.js
-        - test2.spec.js
+docker run -dp 3000:3000 -v /var/run/docker.sock:/var/run/docker.sock mikesir87/network-interceptor
 ```
 
-### Test Runners
-
-Currently, only [Jest](https://jestjs.io) tests are supported. Soon, Cypress tests will be supported as well.
-
-
-### `suite.yaml` Definition
-
-The `suite.yaml` file must provide the following information:
-
-```yaml
-title: Short Title
-description: A longer description for the suite
-runner: jest
-```
-
-Eventually, additional runners (like Cypress) will be supported, so more config options will eventually be added.
-
+After the container starts, open http://localhost:3000 to see the application.
 
 ## Development
 
-To spin up development, simply run `docker compose up` and open [http://localhost:3000](http://localhost:3000). 
+To run the application in development, use Docker Compose!
 
-The Node backend is available in `./backend` and through endpoints at `http://localhost:3000/api`. The React client is available in `./client` and through all other endpoints.
+```
+docker compose up -d
+```
 
-To simplify testing, a set of tests are available in `sample-tests` and mounted into the backend. Feel free modify them to experience test failures, etc.
-
+Then, open [http://localhost:3000](http://localhost:3000). Changes you make to either the froned or backend will be seen immediately.

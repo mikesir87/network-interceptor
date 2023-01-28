@@ -29,7 +29,7 @@ export const PacketView : FC<PacketViewProps> = ({ containerId, port }) => {
 
   useEffect(() => {
     if (!listener) {
-      navigate("/captures");
+      navigate("/");
     }
   }, [navigate, listener]);
 

@@ -3,7 +3,6 @@ import CssBaseline from '@mui/material/CssBaseline';
 import Grid from '@mui/material/Grid';
 import { BrowserRouter, Route, Routes } from 'react-router-dom';
 import { Header } from './components/Header';
-import { NotFoundRoute } from './components/NotFoundRoute';
 import { CaptureRoute } from './components/Captures/CaptureRoute';
 
 function App() {
@@ -17,8 +16,7 @@ function App() {
         <Grid container justifyContent="center" columns={{ xs: 4, md: 12, lg: 12 }}>
           <Grid item xs={12} md={10} lg={8}>
             <Routes>
-              <Route path="/captures/*" element={<CaptureRoute />} />
-              <Route path="*" element={<NotFoundRoute />} />
+              <Route path="*" element={<CaptureRoute />} />
             </Routes>
           </Grid>
         </Grid>

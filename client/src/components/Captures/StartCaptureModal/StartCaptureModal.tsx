@@ -42,6 +42,7 @@ export const StartCaptureModal : FC<StartCaptureModalProps> = ({ show, onClose }
 
   const [containers, setContainers] = useState<Container[] | null>(null);
   const [containerId, setContainerId] = useState<string>("");
+  const [loadingPorts, setLoadingPorts] = useState(false);
   const [ports, setPorts] = useState<Port[] | null>(null);
   const [port, setPort] = useState<string>("");
 
@@ -64,9 +65,11 @@ export const StartCaptureModal : FC<StartCaptureModalProps> = ({ show, onClose }
     }
 
     setPort("");
+    setLoadingPorts(true);
     fetch(`/api/containers/${containerId}/ports`)
       .then(r => r.json())
-      .then(d => setPorts(d.ports));
+      .then(d => setPorts(d.ports))
+      .finally(() => setLoadingPorts(false));
   }, [containerId, setPort]);
 
   useEffect(() => {
@@ -117,9 +120,9 @@ export const StartCaptureModal : FC<StartCaptureModalProps> = ({ show, onClose }
           </FormControl>
         )}
 
-        { ports && (
+        { (ports || loadingPorts) && (
           <FormControl fullWidth>
-            <InputLabel id="port-select-label">Port</InputLabel>
+            <InputLabel id="port-select-label">{ ports ? "Port" : "Loading port information..." }</InputLabel>
             <Select
               labelId="port-select-label"
               id="port-select"
@@ -127,8 +130,9 @@ export const StartCaptureModal : FC<StartCaptureModalProps> = ({ show, onClose }
               label="Port"
               onChange={(e) => setPort(e.target.value)}
               sx={{mb: 3}}
+              disabled={!ports}
             >
-              { ports.map(port => (
+              { ports && ports.map(port => (
                 <MenuItem value={port.port} key={port.port}>
                   { port.port } - { port.process ? port.process : <em>Unknown</em> }
                 </MenuItem>

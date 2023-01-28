@@ -105,7 +105,11 @@ function startDump(containerId, port, onMessage, onError) {
 
   return () => {
     if (createdContainer)
-      createdContainer.kill();
+      createdContainer.kill()
+        .catch((e) => {
+          if (e.message.indexOf("No such container") > -1)
+            console.log("Container already killed");
+        });
   };
 } 
 

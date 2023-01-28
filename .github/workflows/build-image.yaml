@@ -26,5 +26,5 @@ jobs:
         uses: docker/build-push-action@v3
         with:
           push: true
-          tags: mikesir87/network-mentor:latest
+          tags: mikesir87/network-interceptor:latest
           platforms: linux/amd64,linux/arm64
