@@ -1,4 +1,7 @@
-FROM node:16 AS base
+FROM --platform=$TARGETPLATFORM node:16 AS prod-base
+WORKDIR /usr/local/app
+
+FROM --platform=$BUILDPLATFORM node:16 AS base
 WORKDIR /usr/local/app
 
 FROM base AS backend-dev
@@ -14,7 +17,7 @@ COPY client/public ./public
 COPY client/src ./src
 RUN yarn build
 
-FROM base
+FROM prod-base
 COPY backend/package.json backend/yarn.lock ./
 RUN yarn install --production && \
     yarn cache clean
