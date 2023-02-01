@@ -42,6 +42,7 @@ export const StartCaptureModal : FC<StartCaptureModalProps> = ({ show, onClose }
 
   const [containers, setContainers] = useState<Container[] | null>(null);
   const [containerId, setContainerId] = useState<string>("");
+  const [refreshContainerCount, setRefreshContainerCount] = useState(0);
   const [loadingPorts, setLoadingPorts] = useState(false);
   const [ports, setPorts] = useState<Port[] | null>(null);
   const [port, setPort] = useState<string>("");
@@ -56,7 +57,7 @@ export const StartCaptureModal : FC<StartCaptureModalProps> = ({ show, onClose }
     fetch("/api/containers")
       .then(r => r.json())
       .then(setContainers);
-  }, [show, setContainers]);
+  }, [show, setContainers, refreshContainerCount]);
 
   useEffect(() => {
     if (containerId === "") {
@@ -98,6 +99,8 @@ export const StartCaptureModal : FC<StartCaptureModalProps> = ({ show, onClose }
         </Typography>
         <Typography id="modal-modal-description" sx={{ mt: 2, mb: 2, }}>
           Let's choose a container and process to listen to!
+          &nbsp;&nbsp;
+          <Button variant="text" onClick={() => setRefreshContainerCount(c => c + 1)}>Refresh</Button>
         </Typography>
 
         { containers && (

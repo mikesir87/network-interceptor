@@ -64,9 +64,9 @@ export const PacketRow : FC<PacketRowProps> = ({ port, packet }) => {
 
 
       <TableRow
-        sx={{bgcolor: "grey.400",}}
+        sx={{bgcolor: "grey.400"}}
       >
-        <TableCell style={{ paddingBottom: 0, paddingTop: 0 }} colSpan={7}>
+        <TableCell style={{ paddingBottom: 0, paddingTop: 0, maxWidth:"100px" }} colSpan={7}>
           <Collapse in={open} timeout="auto" unmountOnExit>
             <Box sx={{ margin: 1 }}>
               <Typography variant="h6" gutterBottom component="div">
