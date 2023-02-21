@@ -1,7 +1,7 @@
-FROM --platform=$TARGETPLATFORM node:16 AS prod-base
+FROM --platform=$TARGETPLATFORM node:18-slim AS prod-base
 WORKDIR /usr/local/app
 
-FROM --platform=$BUILDPLATFORM node:16 AS base
+FROM --platform=$BUILDPLATFORM node:18-slim AS base
 WORKDIR /usr/local/app
 
 FROM base AS backend-dev
